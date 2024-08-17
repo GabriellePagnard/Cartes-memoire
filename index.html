@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu de Cartes Mémoire</title>
+    <!-- Lien vers Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Lien vers la feuille de style personnalisée -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-gray-900 flex items-center justify-center h-screen">
+
+    <div class="text-center">
+        <!-- Titre du jeu -->
+        <h1 class="text-3xl text-white font-bold mb-6">Jeu de Cartes Mémoire</h1>
+
+        <!-- Conteneur de la grille de cartes -->
+        <div id="game-board" class="grid grid-cols-4 gap-4"></div>
+
+        <!-- Bouton pour relancer le jeu -->
+        <button id="restart-btn" class="mt-8 px-6 py-3 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 hidden">
+            Rejouer
+        </button>
+    </div>
+
+    <!-- Fenêtre modale pour afficher les messages (victoire ou échec) -->
+    <div id="message-modal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+        <div class="bg-white p-8 rounded-lg shadow-lg text-center">
+            <h2 id="message" class="text-2xl font-bold mb-4"></h2>
+            <button id="close-modal" class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <!-- Script JavaScript -->
+    <script src="app.js"></script>
+</body>
+
+</html>
