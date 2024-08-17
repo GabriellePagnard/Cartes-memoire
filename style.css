@@ -26,7 +26,7 @@ body, html {
 .card {
     position: relative;
     width: 100%;
-    padding-bottom: 100%;
+    padding-bottom: 100%; /* Aspect ratio 1:1 */
     perspective: 1000px;
 }
 
@@ -90,12 +90,12 @@ body, html {
 
 #start-game {
     background-color: #556B2F; /* Kaki foncé */
-    color: white; /* Couleur du texte */
-    text-transform: uppercase; /* Transforme le texte en majuscules */
-    font-weight: 600; /* Rend le texte légèrement plus épais */
-    padding: 16px 32px; /* Espace à l'intérieur du bouton */
-    border-radius: 8px; /* Coins arrondis */
-    transition: background-color 0.3s ease; /* Effet de transition lors du hover */
+    color: white;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 16px 32px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
 }
 
 #start-game:hover {
@@ -105,16 +105,16 @@ body, html {
 /* Style du bouton "Rejouer" */
 #replay-game {
     background-color: #556B2F; /* Kaki foncé */
-    color: white; /* Couleur du texte */
-    text-transform: uppercase; /* Transforme le texte en majuscules */
-    font-weight: 600; /* Rend le texte légèrement plus épais */
-    padding: 16px 32px; /* Espace à l'intérieur du bouton */
-    border-radius: 8px; /* Coins arrondis */
-    transition: background-color 0.3s ease; /* Effet de transition lors du hover */
+    color: white;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 16px 32px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
 }
 
 #replay-game:hover {
-    background-color: #6B8E23; /* Couleur légèrement plus claire au survol */
+    background-color: #6B8E23;
 }
 
 /* Style du bouton de victoire */
