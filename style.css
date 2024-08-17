@@ -1,54 +1,67 @@
-/* style.css */
-
-/* Styles personnalisés pour le jeu */
+/* Style global */
 body, html {
     margin: 0;
     padding: 0;
+    overflow: hidden;
     font-family: 'Inter', sans-serif;
-    background-color: #1a202c;
 }
 
+/* Plateau de jeu */
 #game-board {
-    max-width: 600px;
-    margin: 0 auto;
+    width: 80%; /* Ajusté pour réduire la taille globale des cartes */
+    max-width: 600px; /* Largeur maximale pour s'assurer que tout s'affiche correctement */
 }
 
+/* Style des cartes */
 .card {
-    width: 100px;
-    height: 140px;
-    background-color: #2d3748;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2rem;
-    font-weight: bold;
-    color: #1a202c;
-    cursor: pointer;
     position: relative;
-    transition: transform 0.3s;
+    width: 100%;
+    padding-bottom: 100%; /* Aspect ratio 1:1 */
+    perspective: 1000px;
 }
 
-.card.flipped {
+.card-inner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    cursor: pointer;
+}
+
+.card.flip .card-inner {
     transform: rotateY(180deg);
 }
 
-.card-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.card-front,
+.card-back {
+    position: absolute;
     width: 100%;
     height: 100%;
-    border-radius: 8px;
-}
-
-.card-back {
-    background-color: #4a5568;
+    backface-visibility: hidden;
+    border-radius: 0.5rem;
 }
 
 .card-front {
-    background-color: #63b3ed;
-    color: #2d3748;
+    background-image: url('images/arriere.png'); /* Remplace cette image par ton image de dos de carte */
+    background-size: cover;
+    background-position: center;
+}
+
+.card-back {
     transform: rotateY(180deg);
+    background-size: cover;
+    background-position: center;
+    background-color: #edf2f7; /* Fond pour la face des cartes si aucune image n'est utilisée */
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+    #game-board {
+        max-width: 100%;
+    }
+
+    .card {
+        margin: 2px; /* Ajustement des marges pour mobile */
+    }
 }

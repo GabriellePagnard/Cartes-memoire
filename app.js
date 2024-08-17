@@ -1,139 +1,123 @@
-// Sélection des éléments HTML nécessaires
+// Variables nécessaires pour le jeu
+const startScreen = document.getElementById('start-screen');
+const gameBoardContainer = document.getElementById('game-board-container');
 const gameBoard = document.getElementById('game-board');
-const messageModal = document.getElementById('message-modal');
-const messageText = document.getElementById('message');
-const closeModalBtn = document.getElementById('close-modal');
-const restartBtn = document.getElementById('restart-btn');
-
-// Variables pour gérer l'état du jeu
-let cardsArray = [];
-let flippedCards = [];
+const startButton = document.getElementById('start-game');
+let hasFlippedCard = false;
+let lockBoard = false;
+let firstCard, secondCard;
 let matchedPairs = 0;
-const totalPairs = 10;
 
-// Liste des symboles pour les paires de cartes (10 symboles différents)
-const cardSymbols = ['🍕', '🍔', '🍟', '🍣', '🍩', '🍦', '🍇', '🍉', '🍌', '🍒'];
+// Liste des images pour les cartes (à personnaliser avec vos images)
+const cardImages = [
+    'img1.png', 'img2.png', 'img3.png', 'img4.png', 'img5.png',
+    'img6.png', 'img7.png', 'img8.png', 'img9.png', 'img10.png'
+];
 
-/**
- * Mélange un tableau de manière aléatoire.
- * @param {Array} array - Le tableau à mélanger.
- * @returns {Array} - Le tableau mélangé.
- */
+// Double les images pour créer des paires
+let cardsArray = [...cardImages, ...cardImages];
+
+// Mélanger les cartes aléatoirement
 function shuffle(array) {
-    return array.sort(() => 0.5 - Math.random());
+    return array.sort(() => Math.random() - 0.5);
 }
 
-/**
- * Génère les cartes pour le jeu et les ajoute à la grille.
- */
-function initializeGame() {
-    // Réinitialiser l'état du jeu
-    gameBoard.innerHTML = '';
-    cardsArray = [];
-    flippedCards = [];
+// Initialisation du jeu
+startButton.addEventListener('click', () => {
+    startScreen.classList.add('hidden');
+    gameBoardContainer.classList.remove('hidden');
+    initGame();
+});
+
+// Initialisation du plateau de jeu
+function initGame() {
     matchedPairs = 0;
+    gameBoard.innerHTML = '';
+    cardsArray = shuffle(cardsArray);
 
-    // Créer un tableau de cartes (chaque symbole est en double)
-    const symbols = [...cardSymbols, ...cardSymbols];
-    const shuffledSymbols = shuffle(symbols);
-
-    // Créer les éléments de carte et les ajouter à la grille
-    shuffledSymbols.forEach((symbol, index) => {
+    // Créer les éléments de carte et les ajouter au plateau
+    cardsArray.forEach((image, index) => {
         const card = document.createElement('div');
         card.classList.add('card');
-        card.dataset.symbol = symbol;
+        card.dataset.image = image;
         card.innerHTML = `
-            <div class="card-content card-back"></div>
-            <div class="card-content card-front">${symbol}</div>
+            <div class="card-inner">
+                <div class="card-front"></div>
+                <div class="card-back" style="background-image: url('images/${image}')"></div> <!-- Ici, les images personnalisées sont utilisées -->
+            </div>
         `;
-        card.addEventListener('click', () => flipCard(card));
+        card.addEventListener('click', flipCard);
         gameBoard.appendChild(card);
-        cardsArray.push(card);
     });
 
-    // Afficher les cartes face visible pendant 15 secondes
-    cardsArray.forEach(card => card.classList.add('flipped'));
+    // Afficher toutes les cartes pendant 15 secondes, puis les cacher
     setTimeout(() => {
-        cardsArray.forEach(card => card.classList.remove('flipped'));
-    }, 15000); // 15 secondes
-}
-
-/**
- * Gère le retournement des cartes.
- * @param {HTMLElement} card - La carte cliquée.
- */
-function flipCard(card) {
-    // Ne rien faire si la carte est déjà retournée ou si plus de 2 cartes sont retournées
-    if (flippedCards.length >= 2 || card.classList.contains('flipped')) return;
-
-    // Retourner la carte
-    card.classList.add('flipped');
-    flippedCards.push(card);
-
-    // Vérifier si deux cartes sont retournées
-    if (flippedCards.length === 2) {
-        checkForMatch();
-    }
-}
-
-/**
- * Vérifie si les deux cartes retournées sont identiques.
- */
-function checkForMatch() {
-    const [card1, card2] = flippedCards;
-
-    if (card1.dataset.symbol === card2.dataset.symbol) {
-        matchedPairs++;
-        flippedCards = [];
-        showTemporaryMessage('Bravo !');
-        if (matchedPairs === totalPairs) {
-            showEndMessage('Félicitations, vous avez trouvé toutes les paires !');
-        }
-    } else {
+        document.querySelectorAll('.card').forEach(card => card.classList.add('flip'));
         setTimeout(() => {
-            card1.classList.remove('flipped');
-            card2.classList.remove('flipped');
-            flippedCards = [];
-        }, 1000); // Délai avant de retourner les cartes (1 seconde)
+            document.querySelectorAll('.card').forEach(card => card.classList.remove('flip'));
+        }, 15000);
+    }, 1000); // Départ avec un petit délai pour un meilleur effet visuel
+}
+
+// Gérer le retournement des cartes
+function flipCard() {
+    if (lockBoard) return;
+    if (this === firstCard) return;
+
+    this.classList.add('flip');
+
+    if (!hasFlippedCard) {
+        // Première carte cliquée
+        hasFlippedCard = true;
+        firstCard = this;
+        return;
+    }
+
+    // Deuxième carte cliquée
+    secondCard = this;
+    checkForMatch();
+}
+
+// Vérifier si les cartes correspondent
+function checkForMatch() {
+    let isMatch = firstCard.dataset.image === secondCard.dataset.image;
+    isMatch ? disableCards() : unflipCards();
+}
+
+// Désactiver les cartes si elles correspondent
+function disableCards() {
+    firstCard.removeEventListener('click', flipCard);
+    secondCard.removeEventListener('click', flipCard);
+    matchedPairs++;
+    resetBoard();
+
+    // Vérifier si toutes les paires sont trouvées
+    if (matchedPairs === cardImages.length) {
+        setTimeout(showWinMessage, 500);
     }
 }
 
-/**
- * Affiche un message temporaire au joueur.
- * @param {string} message - Le message à afficher.
- */
-function showTemporaryMessage(message) {
-    messageText.textContent = message;
-    messageModal.classList.remove('hidden');
+// Retourner les cartes si elles ne correspondent pas
+function unflipCards() {
+    lockBoard = true;
+
     setTimeout(() => {
-        messageModal.classList.add('hidden');
-    }, 1000); // Afficher le message pendant 1 seconde
+        firstCard.classList.remove('flip');
+        secondCard.classList.remove('flip');
+        resetBoard();
+    }, 1000);
 }
 
-/**
- * Affiche un message de fin de partie (victoire ou échec).
- * @param {string} message - Le message à afficher.
- */
-function showEndMessage(message) {
-    messageText.textContent = message;
-    messageModal.classList.remove('hidden');
-    restartBtn.classList.remove('hidden');
+// Réinitialiser l'état du plateau
+function resetBoard() {
+    [hasFlippedCard, lockBoard] = [false, false];
+    [firstCard, secondCard] = [null, null];
 }
 
-/**
- * Ferme la fenêtre modale.
- */
-closeModalBtn.addEventListener('click', () => {
-    messageModal.classList.add('hidden');
-});
+// Afficher un message de victoire
+function showWinMessage() {
+    alert("Félicitations ! Vous avez trouvé toutes les paires !");
+    initGame();
+}
 
-/**
- * Redémarre le jeu lorsque l'utilisateur clique sur "Rejouer".
- */
-restartBtn.addEventListener('click', () => {
-    restartBtn.classList.add('hidden');
-    initializeGame();
-});
-
-// Initialiser le jeu au chargement de la page
-initializeGame();
+// Démarrer le jeu au chargement de la page
