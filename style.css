@@ -6,17 +6,27 @@ body, html {
     font-family: 'Inter', sans-serif;
 }
 
+/* Conteneur de l'image d'arrière-plan */
+#background img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 /* Plateau de jeu */
 #game-board {
-    width: 80%; /* Ajusté pour réduire la taille globale des cartes */
-    max-width: 600px; /* Largeur maximale pour s'assurer que tout s'affiche correctement */
+    width: 80%;
+    max-width: 600px;
 }
 
 /* Style des cartes */
 .card {
     position: relative;
     width: 100%;
-    padding-bottom: 100%; /* Aspect ratio 1:1 */
+    padding-bottom: 100%;
     perspective: 1000px;
 }
 
@@ -43,16 +53,17 @@ body, html {
 }
 
 .card-front {
-    background-image: url('images/arriere.png'); /* Remplace cette image par ton image de dos de carte */
+    background-image: url('images/arriere.png');
     background-size: cover;
     background-position: center;
+    filter: brightness(1.1); /* Voile blanc ajouté pour différencier le dos */
 }
 
 .card-back {
     transform: rotateY(180deg);
     background-size: cover;
     background-position: center;
-    background-color: #edf2f7; /* Fond pour la face des cartes si aucune image n'est utilisée */
+    background-color: #edf2f7;
 }
 
 /* Responsive Design */
@@ -62,6 +73,51 @@ body, html {
     }
 
     .card {
-        margin: 2px; /* Ajustement des marges pour mobile */
+        margin: 2px;
     }
+}
+
+/* Effet de flou pour l'image d'arrière-plan */
+#background img {
+    filter: blur(8px);
+}
+
+/* Assurer que le contenu du jeu apparait au-dessus du flou */
+#start-screen {
+    position: relative;
+    z-index: 10;
+}
+
+#start-game {
+    background-color: #556B2F; /* Kaki foncé */
+    color: white; /* Couleur du texte */
+    text-transform: uppercase; /* Transforme le texte en majuscules */
+    font-weight: 600; /* Rend le texte légèrement plus épais */
+    padding: 16px 32px; /* Espace à l'intérieur du bouton */
+    border-radius: 8px; /* Coins arrondis */
+    transition: background-color 0.3s ease; /* Effet de transition lors du hover */
+}
+
+#start-game:hover {
+    background-color: #6B8E23; /* Couleur légèrement plus claire au survol */
+}
+
+/* Style du bouton "Rejouer" */
+#replay-game {
+    background-color: #556B2F; /* Kaki foncé */
+    color: white; /* Couleur du texte */
+    text-transform: uppercase; /* Transforme le texte en majuscules */
+    font-weight: 600; /* Rend le texte légèrement plus épais */
+    padding: 16px 32px; /* Espace à l'intérieur du bouton */
+    border-radius: 8px; /* Coins arrondis */
+    transition: background-color 0.3s ease; /* Effet de transition lors du hover */
+}
+
+#replay-game:hover {
+    background-color: #6B8E23; /* Couleur légèrement plus claire au survol */
+}
+
+/* Style du bouton de victoire */
+#win-modal {
+    backdrop-filter: blur(5px);
 }

@@ -3,10 +3,15 @@ const startScreen = document.getElementById('start-screen');
 const gameBoardContainer = document.getElementById('game-board-container');
 const gameBoard = document.getElementById('game-board');
 const startButton = document.getElementById('start-game');
+const winModal = document.getElementById('win-modal');
+const winMessage = document.getElementById('win-message');
+const replayButton = document.getElementById('replay-game');
+
 let hasFlippedCard = false;
 let lockBoard = false;
 let firstCard, secondCard;
 let matchedPairs = 0;
+let moves = 0;
 
 // Liste des images pour les cartes (à personnaliser avec vos images)
 const cardImages = [
@@ -32,7 +37,9 @@ startButton.addEventListener('click', () => {
 // Initialisation du plateau de jeu
 function initGame() {
     matchedPairs = 0;
+    moves = 0;
     gameBoard.innerHTML = '';
+    winModal.classList.add('hidden');
     cardsArray = shuffle(cardsArray);
 
     // Créer les éléments de carte et les ajouter au plateau
@@ -43,7 +50,7 @@ function initGame() {
         card.innerHTML = `
             <div class="card-inner">
                 <div class="card-front"></div>
-                <div class="card-back" style="background-image: url('images/${image}')"></div> <!-- Ici, les images personnalisées sont utilisées -->
+                <div class="card-back" style="background-image: url('images/${image}')"></div>
             </div>
         `;
         card.addEventListener('click', flipCard);
@@ -56,7 +63,7 @@ function initGame() {
         setTimeout(() => {
             document.querySelectorAll('.card').forEach(card => card.classList.remove('flip'));
         }, 15000);
-    }, 1000); // Départ avec un petit délai pour un meilleur effet visuel
+    }, 1000);
 }
 
 // Gérer le retournement des cartes
@@ -75,6 +82,7 @@ function flipCard() {
 
     // Deuxième carte cliquée
     secondCard = this;
+    moves++;
     checkForMatch();
 }
 
@@ -114,10 +122,11 @@ function resetBoard() {
     [firstCard, secondCard] = [null, null];
 }
 
-// Afficher un message de victoire
+// Afficher un message de victoire avec le nombre de coups
 function showWinMessage() {
-    alert("Félicitations ! Vous avez trouvé toutes les paires !");
-    initGame();
+    winMessage.textContent = `Félicitations ! Vous avez trouvé toutes les paires en ${moves} coups !`;
+    winModal.classList.remove('hidden');
 }
 
-// Démarrer le jeu au chargement de la page
+// Redémarrer le jeu en cliquant sur le bouton "Rejouer"
+replayButton.addEventListener('click', initGame);

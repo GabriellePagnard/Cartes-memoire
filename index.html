@@ -10,18 +10,35 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="bg-cover bg-center" style="background-image: url('images/background.jpg');">
+<body>
+    <!-- Conteneur de l'image d'arrière-plan avec flou -->
+    <div id="background" class="absolute inset-0">
+        <img src="images/background.jpg" alt="Background Image" class="w-full h-full object-cover filter blur-lg">
+    </div>
+
     <!-- Page de démarrage -->
-    <div id="start-screen" class="flex items-center justify-center h-screen">
-        <div class="text-center">
-            <h1 class="text-4xl font-bold text-white mb-8">Jeu de Cartes Mémoire</h1>
-            <button id="start-game" class="bg-blue-600 text-white font-semibold px-8 py-4 rounded-lg hover:bg-blue-700">Lancer le jeu</button>
+    <div id="start-screen" class="relative flex items-center justify-center h-screen z-10">
+        <div class="text-center p-8 rounded-lg">
+            <h1 class="text-4xl font-bold text-green-800 mb-8">Jeu de Cartes Mémoire</h1>
+            <button id="start-game" class="bg-green-200 text-green-800 font-semibold px-8 py-4 rounded-lg hover:bg-green-300">
+                Lancer le jeu
+            </button>
         </div>
     </div>
 
     <!-- Plateau de jeu -->
     <div id="game-board-container" class="hidden flex items-center justify-center h-screen">
         <div id="game-board" class="grid grid-cols-4 gap-2"></div>
+    </div>
+
+    <!-- Pop-up de fin de jeu -->
+    <div id="win-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+        <div class="bg-white p-8 rounded-lg shadow-2xl text-center transform transition-transform scale-90">
+            <h2 id="win-message" class="text-2xl font-bold text-green-800 mb-4"></h2>
+            <button id="replay-game" class="bg-green-200 text-green-800 font-semibold px-8 py-4 rounded-lg hover:bg-green-300">
+                Rejouer
+            </button>
+        </div>
     </div>
 
     <!-- Inclusion du script JavaScript -->
